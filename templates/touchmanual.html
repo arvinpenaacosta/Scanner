@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add the Bootstrap CSS and JavaScript links here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/nocvintory.css">   
+    
+    <title>NOCVINTORY APP</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+
+    <!-- SCANNER BOX -->
+    <div>
+        <!-- SCANNER BOX -->
+        
+        <div id="qr-reader" style="
+                    display: none;
+                    top: -50px; 
+                    width: 80%; 
+                    max-width: 500px; 
+                    margin-bottom: 5px;
+                    ">
+                        
+        </div> 
+
+        
+        <!-- CLOSE SCANNER BOX -->
+        <div class="mb-1">
+            <div class="d-flex align-items-center flex-column mt-4">
+                <div class="col-12 form-group">
+            
+                    <div class="revert-container">
+                        <button type="button" class="btn btn-danger revert-rounded" id="revert-scan" style="display: none;">Revert Process</button>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
+
+    <!-- FORM INPUT-->
+    <div class="container  glass-container">
+        <h4 class="text-center">NOCvinTORY Scan</h4>
+
+        
+        <form id="myForm" class="mt-2">
+
+            <div class="mb-1">
+                <label for="scaninput1" class="form-label label-spacing"><em style="color: red;">* </em> NOC ID/User:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput1" class="form-control form-control-sm input-spacing" name="scaninput1" readonly required>
+                    <div class="input-group-append">
+                    <button type="button" class="transparent-button form-control-sm" onclick="clearProfileData()" >
+                        <img src="/static/svg/remove.svg" alt="+" class="bi bi-person-x-fill enlarge-image red-image"/>
+                    </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput2" class="form-label label-spacing"><em style="color: red;">* </em> Location:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput2" class="form-control form-control-sm input-spacing" name="scaninput2" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput2">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput3" class="form-label label-spacing"><em style="color: red;">* </em> CPU Serial Number:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput3" class="form-control form-control-sm input-spacing" name="scaninput3" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput3">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mb-1">
+                <label for="scaninput4" class="form-label label-spacing"><em style="color: red;">* </em> Mac Address:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput4" class="form-control form-control-sm input-spacing" name="scaninput4"  readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput4">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput5" class="form-label label-spacing">Monitor 1 Serial:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput5" class="form-control form-control-sm input-spacing" name="scaninput5" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput5">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput6" class="form-label label-spacing">Monitor 2 Serial:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput6" class="form-control form-control-sm input-spacing" name="scaninput6"  readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput6">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button type="button" id="submitButton" class="btn btn-secondary " disabled>Submit</button>
+            </div>   
+
+        </form>
+
+        <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+            <button id="download-button" class="btn btn-warning mt-3">Download Records</button>
+            <button id="remove-csv-button" class="btn btn-danger mt-3">Remove CSV Data</button>
+        </div>
+    </div>
+
+    <footer class="footer fixed-bottom bg-dark">
+        <div class="container_footer text-center">
+            <p style="color: white;">&copy; 2023 aacosta - beta</p>
+        </div>
+    </footer>
+
+
+
+    <!-- MODAL SCANINPUT / MANUAL ENRTY -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Manual Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="modalInput" class="form-label">Enter value manually:</label>
+                    <input type="text" id="modalInput" class="form-control" autofocus>
+                </div>
+                <div class="modal-footer">
+                <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                    <button type="button" class="btn btn-primary" id="setValueButton" data-bs-dismiss="modal">Set Value</button>
+                </div>
+                <p><em style="color: red;">* Required</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PROFILE ENTRY -->
+    <div class="modal fade" id="savedProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="savedprofileLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="savedprofileLabel">Set Profile Value</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="profileInput" class="form-label">Enter a new value:</label>
+                    <input type="text" id="profileInput" class="form-control" autofocus>
+                </div>
+                <div class="modal-footer">                
+                <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                    <button type="button" class="btn btn-primary" id="setProfileValue" data-bs-dismiss="modal">Set Profile</button>
+                </div>
+                <p><em style="color: red;">* Required</em></p>    
+                </div>
+                        
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Confirmation to Remove -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to remove the CSV data? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="confirm-remove" class="btn btn-danger">Yes, Remove</button>
+                <button id="cancel-remove" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Success Notification Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <p>Data saved successfully.</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-success-modal" class="btn btn-primary">Close</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL No Scanned Records Modal -->
+    <div id="no-records-modal" class="modal">
+        <div class="modal-content">
+            <p>No scanned records to download.</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-no-records-modal" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Delete Profile -->
+    <div id="deleteProfile" class="modal">
+        <div class="modal-content">
+            <p>Profile Record will cleared</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-deleteProfile" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+
+<!-- =======================================================================================  -->
+    <script src="/static/nocvintory.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.7/html5-qrcode.min.js"></script>
+
+
+
+    
+
+
+</body>
+</html>
