@@ -70,7 +70,7 @@ async def home(
 
     print("STARTING WEB APP - PAYPAL SCANNER3")
     #return templates.TemplateResponse("signon.html", 
-    return templates.TemplateResponse("touchmanual.html", 
+    return templates.TemplateResponse("touchmanual1.html", 
         {"request": request}
         )
 
@@ -124,6 +124,7 @@ async def process_scan(
     scaninput4: str = Form(...),
     scaninput5: str = Form(...),
     scaninput6: str = Form(...),
+    scaninput7: str = Form(...),
 ):
 
     print(scaninput1)
@@ -132,6 +133,7 @@ async def process_scan(
     print(scaninput4)
     print(scaninput5)
     print(scaninput6)
+    print(scaninput7)
     
     #if scaninput1 is None and scaninput2 is None and scaninput3 is None and scaninput4 is None:
     #    okmsg = "FAILED: Scan Data is not complete..."
