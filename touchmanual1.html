@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add the Bootstrap CSS and JavaScript links here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <title>Bootstrap Modal Example</title>
+
+
+<style>
+
+
+    html {
+        
+
+        
+        background-image: url('/static/img/eper.png'); 
+        
+        
+            /* Replace with the URL of your background image */
+        
+        background-size: cover; /* Ensure the background image covers the entire viewport */
+        background-repeat: no-repeat; /* Prevent background image from repeating */
+        background-attachment: fixed; /* Fix the background image in place */
+    }
+
+    body {
+        background: none; /* Remove any additional background set on the body */
+    }
+
+
+    .container {
+     margin-top: -150px;
+    }
+
+
+    /* Apply a frosted glass effect using a background image */
+    .glass-container {
+
+
+        width: 350px; /* Set the width to 300px */
+        /* background-color: rgba(255, 255, 255, 1);  Semi-transparent white background with reduced opacity */
+        background-color: rgba(255, 255, 255, 1); /* Semi-transparent white background with reduced opacity */
+        background-size: cover; /* Adjust background size as needed */
+        opacity: .9; /* Adjust opacity as needed (reduced for less frosted effect) */
+        border: 2px solid rgba(0, 0, 0, 0.1); /* Border with opacity */
+        border-radius: 10px; /* Rounded corners */
+        padding: 10px; /* Add some padding for spacing */
+        margin-top: 0px; /* Adjust this value as needed */
+    }
+
+
+    /* Make labels and input elements darker */
+    .glass-container label, .glass-container input {
+        color: #333; /* Darken the text color */
+        background-color: #fff; /* Set a lighter background color for contrast */
+    }
+
+    .glass-container input {
+        border: 2px solid #333; /* Set a thicker and darker border */
+    }
+
+
+
+    /* Styles for the modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    }
+
+    .modal-content {
+        background-color: white;
+        max-width: 400px;
+        margin: 20% auto;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    /* Styles for the modal buttons */
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .modal-buttons button {
+        margin: 10px;
+    }
+
+    .modal-title {
+        color: red;
+    }
+
+    #revert-scan {
+        margin-top: 30px; /* Adjust the value as needed */
+        /* Position the button 20px lower relative to its original position */
+        top: -50px; /* Adjust the value as needed */
+        position: relative; /* Ensure the button stays within its container */
+        height: 100px;
+        width: 300px;
+    }
+
+
+
+    .revert-container {
+        
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: flex-start; /* Align content to the top (vertical position) */
+        border-radius: 45px;
+
+    }
+    .revert-rounded {
+      border-radius: 45px; /* Adjust the value to control the degree of rounding */
+    }
+
+
+    .label-spacing {
+        margin-bottom: 1px; /* Adjust the margin as needed */
+    }
+
+    .input-spacing {
+        margin-bottom: 4px; /* Adjust the margin as needed */
+        border-radius: 15px;
+    }
+
+    .transparent-button {
+        /*background: transparent;*/
+        border: 2px solid;
+        background-color: amber;
+        border-top-right-radius: 20px; /* Adjust the value for top-right corner */
+        border-bottom-right-radius: 20px; /* Adjust the value for bottom-right corner */
+    }
+
+    .enlarge-image {
+        width: 20px; /* Adjust the width as needed */
+        height: 20px; /* Adjust the height as needed */
+    }
+
+    .red-image {
+        color: red;
+    }
+
+
+
+    #qr-reader {
+            width: 350px; /* Set the desired width */
+            height: 350px;  /*Set the desired height */
+            margin: -20px auto 0 auto; /* Center the div horizontally */
+            /* background-color: #FF5733; /*  Set the background color to amber */
+        }
+</style>
+
+
+
+
+
+</head>
+<body>
+
+    <!-- SCANNER BOX -->
+    <div>
+        <!-- SCANNER BOX -->
+        
+        <div id="qr-reader" style="
+                    display: none;
+                    top: -50px; 
+                    width: 80%; 
+                    max-width: 500px; 
+                    margin-bottom: 5px;
+                    ">
+                        
+        </div> 
+
+        
+        <!-- CLOSE SCANNER BOX -->
+        <div class="mb-1">
+            <div class="d-flex align-items-center flex-column mt-4">
+                <div class="col-12 form-group">
+            
+                    <div class="revert-container">
+                        <button type="button" class="btn btn-danger revert-rounded" id="revert-scan" style="display: none;">Revert Process</button>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
+
+    <!-- FORM INPUT-->
+    <div class="container  glass-container">
+        <h4 class="text-center">NOCvinTORY Scan</h4>
+
+        
+        <form id="myForm" class="mt-2">
+
+            <div class="mb-1"><!--REQUIRED-->
+                <label for="scaninput1" class="form-label label-spacing"><em style="color: red;">* </em> NOC ID/User:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput1" class="form-control form-control-sm input-spacing" name="scaninput1" readonly required>
+                    <div class="input-group-append">
+                    <button type="button" class="transparent-button form-control-sm" onclick="clearProfileData()" >
+                        <img src="/static/svg/remove.svg" alt="+" class="bi bi-person-x-fill enlarge-image red-image"/>
+                    </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1"><!--REQUIRED-->
+                <label for="scaninput2" class="form-label label-spacing"><em style="color: red;">* </em> Location:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput2" class="form-control form-control-sm input-spacing" name="scaninput2" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput2">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1"><!--REQUIRED-->
+                <label for="scaninput3" class="form-label label-spacing"><em style="color: red;">* </em> CPU Serial Number:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput3" class="form-control form-control-sm input-spacing" name="scaninput3" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput3">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1"> <!--REQUIRED-->
+                <label for="scaninput4" class="form-label label-spacing"><em style="color: red;">* </em> Hostname:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput4" class="form-control form-control-sm input-spacing" name="scaninput4"  readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput4">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput5" class="form-label label-spacing">Mac Address:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput5" class="form-control form-control-sm input-spacing" name="scaninput5" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput5">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput6" class="form-label label-spacing">Monitor 1 Serial:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput6" class="form-control form-control-sm input-spacing" name="scaninput6"  readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput6">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-1">
+                <label for="scaninput7" class="form-label label-spacing">Monitor 2 Serial:</label>
+                <div class="input-group">
+                    <input type="text" id="scaninput7" class="form-control form-control-sm input-spacing" name="scaninput7"  readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="transparent-button form-control-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-input-target="scaninput7">
+                            <img src="/static/svg/pencil.svg" alt="+" class="bi bi-pencil enlarge-image"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+           <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button type="button" id="submitButton" class="btn btn-secondary " disabled>Submit</button>
+            </div>   
+
+        </form>
+
+        <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+            <button id="download-button" class="btn btn-warning mt-3">Download Records</button>
+            <button id="remove-csv-button" class="btn btn-danger mt-3">Remove CSV Data</button>
+        </div>
+    </div>
+
+    <footer class="footer fixed-bottom bg-dark">
+        <div class="container_footer text-center">
+            <p style="color: white;">&copy; 2023 aacosta - beta</p>
+        </div>
+    </footer>
+
+
+
+    <!-- MODAL SCANINPUT / MANUAL ENRTY -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Manual Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="modalInput" class="form-label">Enter value manually:</label>
+                    <input type="text" id="modalInput" class="form-control" autofocus>
+                </div>
+                <div class="modal-footer">
+                <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                    <button type="button" class="btn btn-primary" id="setValueButton" data-bs-dismiss="modal">Set Value</button>
+                </div>
+                <p><em style="color: red;">* Required</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PROFILE ENTRY -->
+    <div class="modal fade" id="savedProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="savedprofileLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="savedprofileLabel">Set Profile Value</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="profileInput" class="form-label">Enter a new value:</label>
+                    <input type="text" id="profileInput" class="form-control" autofocus>
+                </div>
+                <div class="modal-footer">                
+                <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                    <button type="button" class="btn btn-primary" id="setProfileValue" data-bs-dismiss="modal">Set Profile</button>
+                </div>
+                <p><em style="color: red;">* Required</em></p>    
+                </div>
+                        
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Confirmation to Remove -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to remove the CSV data? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="confirm-remove" class="btn btn-danger">Yes, Remove</button>
+                <button id="cancel-remove" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Success Notification Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <p>Data saved successfully.</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-success-modal" class="btn btn-primary">Close</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL No Scanned Records Modal -->
+    <div id="no-records-modal" class="modal">
+        <div class="modal-content">
+            <p>No scanned records to download.</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-no-records-modal" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Delete Profile -->
+    <div id="deleteProfile" class="modal">
+        <div class="modal-content">
+            <p>Profile Record will cleared</p>
+
+            <div class="col-12 form-group d-flex justify-content-center align-items-center flex-column mt-3">
+                <button id="close-deleteProfile" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+
+<!-- =======================================================================================  -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.7/html5-qrcode.min.js"></script>
+
+<script>
+    //<!-- EVENT SUBMIT BUTTON - SAVE SCANNED INPUT TO LOCALSTORAGE -->
+
+        let filename = 'nocvintory.csv';
+        
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            event.preventDefault();
+            handleFormSubmission();
+            });
+
+        function formatCurrentDate() {
+          const currentDate = new Date();
+          const year = currentDate.getFullYear();
+          const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+          const day = currentDate.getDate().toString().padStart(2, '0');
+          const hours = currentDate.getHours().toString().padStart(2, '0');
+          const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+          const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+
+          return `${year}${month}${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+
+        // SAVE FUNCTION SCANNED INPUT TO LOCALSTORAGE
+        function handleFormSubmission() {
+
+            if (document.getElementById('scaninput5').value === '') document.getElementById('scaninput5').value = 'na';
+            if (document.getElementById('scaninput6').value === '') document.getElementById('scaninput6').value = 'na';
+            if (document.getElementById('scaninput7').value === '') document.getElementById('scaninput7').value = 'na';
+
+            const input1Val = document.getElementById('scaninput1').value;
+            const input2Val = document.getElementById('scaninput2').value;
+            const input3Val = document.getElementById('scaninput3').value;
+            const input4Val = document.getElementById('scaninput4').value;
+            const input5Val = document.getElementById('scaninput5').value;
+            const input6Val = document.getElementById('scaninput6').value;
+            const input7Val = document.getElementById('scaninput7').value;
+
+            // Call the function to get the formatted date
+            const formattedDate = formatCurrentDate();
+
+            const newSubmission = {
+                'NOC ID/User': input1Val,
+                'Locale': input2Val,
+                'Serial Number': input3Val,
+                'Hostname': input4Val,
+                'Mac Address': input5Val,
+                'Monitor 1': input6Val,
+                'Monitor 2': input7Val,
+                'Date Scanned': formattedDate,
+            };
+
+            appendToCSV(newSubmission, filename);
+            displaySuccessModal();
+
+            const formData = new FormData();
+            formData.append('scaninput1', input1Val);
+            formData.append('scaninput2', input2Val);
+            formData.append('scaninput3', input3Val);
+            formData.append('scaninput4', input4Val);
+            formData.append('scaninput5', input5Val);
+            formData.append('scaninput6', input6Val);
+            formData.append('scaninput7', input6Val);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload', true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+            } else {
+                console.error('Error:', xhr.status, xhr.statusText);
+            }
+            };
+
+            xhr.send(formData);
+
+            document.querySelector('form').reset();
+            updateInputsFromQRCode();
+        }
+
+    //<!-- SCANNER SCRIPT -->
+    
+        let html5QrcodeScanner;
+        let activeInput;
+
+        const scaninput1Var = document.getElementById('scaninput1');
+        const scaninput2Var = document.getElementById('scaninput2');
+        const scaninput3Var = document.getElementById('scaninput3');
+        const scaninput4Var = document.getElementById('scaninput4');
+
+        const scaninput5Var = document.getElementById('scaninput5');
+        const scaninput6Var = document.getElementById('scaninput6');
+        const scaninput7Var = document.getElementById('scaninput7');
+        
+        const revertScanButton = document.getElementById('revert-scan');
+
+        // Get references to the new modal elements
+        const noRecordsModal = document.getElementById('no-records-modal');
+        const closeNoRecordsModalButton = document.getElementById('close-no-records-modal');
+
+
+
+        // Function to display the "No Scanned Records" modal
+        function displayNoRecordsModal() {
+            noRecordsModal.style.display = 'block';
+        }
+
+        // Function to close the "No Scanned Records" modal
+        function closeNoRecordsModal() {
+            noRecordsModal.style.display = 'none';
+        }
+
+        function toggleScanner(inputId) {
+            if (!html5QrcodeScanner) {
+                openScanner(inputId);
+            } else {
+                closeScanner();
+            }
+        }
+
+        function openScanner(inputId) {
+            // Show the QR code scanner
+            const qrReader = document.getElementById('qr-reader');
+            qrReader.style.display = 'block';
+
+            // Show the "Revert Scanning" button
+            revertScanButton.style.display = 'block';
+
+            const qrInput = document.getElementById(inputId);
+            qrInput.focus(); // Focus on the input element
+
+            html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", { fps: 20, qrbox: 250 });
+
+            html5QrcodeScanner.render((decodedText, decodedResult) => {
+            // Set the scanned data to the input element
+            qrInput.value = decodedText;
+
+            // Close the scanner after scanning
+            closeScanner();
+            updateInputsFromQRCode();
+            });
+        }
+
+        function closeScanner() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+                html5QrcodeScanner = null;
+            }
+
+            // Hide the QR code scanner
+            const qrReader = document.getElementById('qr-reader');
+            qrReader.style.display = 'none';
+
+            // Hide the "Revert Scanning" button
+            revertScanButton.style.display = 'none';
+        }
+
+        
+
+        function addClickListenerToScanInput(scaninputVar, index) {
+            scaninputVar.addEventListener('click', function () {
+                activeInput = scaninputVar;
+                scaninputVar.value = '';
+                openScanner(`scaninput${index}`);
+            });
+        }
+
+        addClickListenerToScanInput(scaninput1Var, 1);
+        addClickListenerToScanInput(scaninput2Var, 2);
+        addClickListenerToScanInput(scaninput3Var, 3);
+        addClickListenerToScanInput(scaninput4Var, 4);
+        addClickListenerToScanInput(scaninput5Var, 5);
+        addClickListenerToScanInput(scaninput6Var, 6);
+        addClickListenerToScanInput(scaninput7Var, 7);
+
+
+ 
+        // Add a click event listener to the "OK" button in the "No Scanned Records" modal
+        closeNoRecordsModalButton.addEventListener('click', closeNoRecordsModal);
+
+        // Add a click event listener to the "Revert Scanning" button
+        revertScanButton.addEventListener('click', function () {
+            closeScanner();
+            updateInputsFromQRCode();
+            //alert('Closing Camera....'); // For example, display an alert
+        });
+ 
+    //<!-- VALIDATION for SUBMIT BUTTON if Valid for Submission -->
+    
+        function updateInputsFromQRCode() {
+          const inputchk1 = scaninput1Var.value.trim();
+          const inputchk2 = scaninput2Var.value.trim();
+          const inputchk3 = scaninput3Var.value.trim();
+          const inputchk4 = scaninput4Var.value.trim();
+
+          const submitButton = document.getElementById('submitButton');
+
+          if (inputchk1 !== '' && inputchk2 !== '' && inputchk3 !== '' && inputchk4 !== '') {
+            // All input fields are filled, enable the submit button
+            submitButton.classList.remove('btn-secondary');
+            submitButton.classList.add('btn-success');
+            submitButton.removeAttribute('disabled');
+
+          } else {
+            // At least one input field is empty, disable the submit button and show an error message
+            submitButton.classList.remove('btn-success');
+            submitButton.classList.add('btn-secondary');
+            submitButton.setAttribute('disabled', 'disabled');
+
+          }
+        }
+
+    //<!-- SAVING INVENTORY TO LOCALSTORAGE -->
+    
+
+
+        // Get references to elements
+        const successModal = document.getElementById('success-modal');
+        const closeSuccessModalButton = document.getElementById('close-success-modal');
+
+        // Get references to elements
+        const removeCSVButton = document.getElementById('remove-csv-button');
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const confirmRemoveButton = document.getElementById('confirm-remove');
+        const cancelRemoveButton = document.getElementById('cancel-remove');
+
+        const removeProfileButton = document.getElementById('remove-csv-button');
+
+
+        // Function to display the success modal
+        function displaySuccessModal() {
+            successModal.style.display = 'block';
+        }
+
+        // Function to close the success modal
+        function closeSuccessModal() {
+            successModal.style.display = 'none';
+        }
+
+        // Function to display the modal
+        function displayModal() {
+            confirmationModal.style.display = 'block';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            confirmationModal.style.display = 'none';
+        }
+
+        // Function to remove the CSV data from local storage
+        function removeCSVData() {
+            localStorage.removeItem(filename);
+            // alert('CSV data removed. You can start with a fresh CSV.');
+        }
+
+        function downloadAllScannedRecords() {
+            const existingData = localStorage.getItem(filename);
+
+            if (existingData) {
+                const csvData = JSON.parse(existingData);
+                const csvContent = convertArrayOfObjectsToCSV(csvData);
+
+                // Create a Blob with the CSV data
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+
+                // Trigger a click event on the anchor element to initiate the download
+                document.body.appendChild(a);
+                a.click();
+
+                // Clean up by removing the temporary URL and the anchor element
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } else {
+                displayNoRecordsModal(); // Display the "No Scanned Records" modal
+                //alert('No scanned records to download.');
+            }
+        }
+
+        // Function to append data to the CSV file
+        function appendToCSV(data) {
+            const csvData = localStorage.getItem(filename) ? JSON.parse(localStorage.getItem(filename)) : [];
+            csvData.push(data);
+            localStorage.setItem(filename, JSON.stringify(csvData));
+        }
+
+
+
+        // Function to convert an array of objects to a CSV string
+        function convertArrayOfObjectsToCSV(data) {
+            const header = Object.keys(data[0]).join(',');
+            const rows = data.map(obj => Object.values(obj).join(','));
+            return header + '\n' + rows.join('\n');
+        }        
+
+
+        // Add a click event listener to the "Download Scanned Records" button
+        document.getElementById('download-button').addEventListener('click', function () {
+            downloadAllScannedRecords();
+        });
+
+
+        // Add a click event listener to the "Remove CSV Data" button
+        removeCSVButton.addEventListener('click', displayModal);
+
+        // Add click event listeners to modal buttons
+        confirmRemoveButton.addEventListener('click', function () {
+            // Remove CSV data if confirmed
+            closeModal();
+            removeCSVData();
+        });
+
+        cancelRemoveButton.addEventListener('click', closeModal);
+
+        // Add a click event listener to the "Close" button in the success modal
+        closeSuccessModalButton.addEventListener('click', closeSuccessModal);
+   
+    //<!-- CLEAR PROFILE TO LOCALSTORAGE -->
+    
+        // Add a click event listener to the "Download Scanned Records" button
+        document.getElementById('download-button').addEventListener('click', function () {
+            downloadAllScannedRecords();
+        });
+
+        // Add a click event listener to the "Remove CSV Data" button
+        removeCSVButton.addEventListener('click', displayModal);
+
+        // Add click event listeners to modal buttons
+        confirmRemoveButton.addEventListener('click', function () {
+            // Remove CSV data if confirmed
+            closeModal();
+            removeCSVData();
+        });
+
+        cancelRemoveButton.addEventListener('click', closeModal);
+
+        // Add a click event listener to the "Close" button in the success modal
+        closeSuccessModalButton.addEventListener('click', closeSuccessModal);
+
+    //<!-- SCRIPT FOR INPUT MODAL ENTRY - BUTTON is Clicked -->
+    
+        // Set the input field when "Set Value" button is clicked
+        document.querySelectorAll('[data-bs-target="#staticBackdrop"]').forEach(function (button) {
+            button.addEventListener('click', function() {
+                const inputTarget = this.getAttribute('data-input-target');
+                const inputValue = document.getElementById(inputTarget).value;
+                
+
+                const label = this.closest('.mb-1').querySelector('.form-label').textContent;
+                const modalLabel = document.getElementById('staticBackdropLabel');
+                modalLabel.textContent = label;
+
+
+
+                //retrieve & set the value of input field
+                document.getElementById('setValueButton').setAttribute('data-input-target', inputTarget);
+                document.getElementById('modalInput').value = inputValue;
+
+                //set cursor position -select all
+                //document.getElementById('modalInput').select();
+                //modalInput.select();
+
+                //set cursor position -infront
+                document.getElementById('modalInput').setSelectionRange(0, 0);
+                //modalInput.setSelectionRange(0, 0);
+            });
+        });
+
+        // Update the input field when "Set Value" button is clicked
+        document.getElementById('setValueButton').addEventListener('click', function() {
+            const inputTarget = this.getAttribute('data-input-target');
+            const modalInputValue = document.getElementById('modalInput').value;
+            document.getElementById(inputTarget).value = modalInputValue;
+            updateInputsFromQRCode()
+        });
+
+        // Add event listener to focus the input field when the modal is shown
+        document.getElementById('staticBackdrop').addEventListener('shown.bs.modal', function() {
+        document.getElementById('modalInput').focus();
+
+        });
+
+    //<!-- SAVING & CLEARING PROFILE TO LOCALSTORAGE -->
+    
+        // Retrieve saved profile data from LocalStorage
+        const savedProfileData = localStorage.getItem('savedprofiledata');
+
+        if (savedProfileData) {
+            // Set the value to an input field (modify 'scaninput1' to the correct ID)
+            document.getElementById('scaninput1').value = savedProfileData;
+        } else {
+            // Open the modal for saved profile data if there's no data
+            const savedProfileModal = new bootstrap.Modal(document.getElementById('savedProfileModal'));
+            savedProfileModal.show();
+        }
+
+        // Add event listener to focus the input field when the modal is shown
+        document.getElementById('savedProfileModal').addEventListener('shown.bs.modal', function() {
+            document.getElementById('profileInput').focus();
+        });
+
+        // Set the input field and save to LocalStorage when "Set Value" button is clicked
+        document.getElementById('setProfileValue').addEventListener('click', function() {
+            const modalInputValue = document.getElementById('profileInput').value;
+            // Save to LocalStorage
+            localStorage.setItem('savedprofiledata', modalInputValue);
+            // Set the value to scaninput1 (modify 'scaninput1' to the correct ID)
+            // document.getElementById('scaninput1').value = modalInputValue;
+            // Close the modal
+            const savedProfileModal = new bootstrap.Modal(document.getElementById('savedProfileModal'));
+            savedProfileModal.hide();
+            window.location.reload();
+        });
+
+
+        function clearProfileData() {
+            const removeProfileModal = new bootstrap.Modal(document.getElementById('deleteProfile'));
+            // Optionally, you can provide feedback to the user (e.g., an alert)
+            removeProfileModal.show();            
+            //alert('Profile data has been cleared.');
+        }
+
+        document.getElementById('close-deleteProfile').addEventListener('click', function() {
+            localStorage.removeItem('savedprofiledata');
+
+            // Close the modal
+            const removeProfileModal = new bootstrap.Modal(document.getElementById('deleteProfile'));
+            removeProfileModal.hide();
+            window.location.reload();
+        });
+
+
+</script>
+
+
+
+    
+
+
+</body>
+</html>
